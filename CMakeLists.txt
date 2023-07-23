@@ -3,7 +3,6 @@ project(millie-api CXX)
 
 include(CheckIncludeFileCXX)
 
-add_compile_options(-std=c++20 -fcoroutines)
 check_include_file_cxx(any HAS_ANY)
 check_include_file_cxx(string_view HAS_STRING_VIEW)
 check_include_file_cxx(coroutine HAS_COROUTINE)
