@@ -7,26 +7,19 @@ using namespace drogon;
 
 DROGON_TEST(UsersAPITest)
 {
-  auto fn1 = async_func([TEST_CTX]() -> drogon::Task<void> {
-    auto client = HttpClient::newHttpClient("http://127.0.0.1:8848");
+  auto fn = async_func([TEST_CTX]() -> drogon::Task<void> {
+    auto client = HttpClient::newHttpClient("http://127.0.0.1:8080");
     auto req = HttpRequest::newHttpRequest();
-    req->setPath("/users");
+    req->setPath("/v1/users/00000000-0000-0000-0000-000000000000");
 
     auto res = co_await client->sendRequestCoro(req);
     CO_REQUIRE(res != nullptr);
     CHECK(res->getStatusCode() == k200OK);
     CHECK(res->contentType() == CT_APPLICATION_JSON);
+    CO_REQUIRE(res->contentType() == CT_APPLICATION_JSON);
+    CHECK(!res->getJsonObject()->isNull());
+    CHECK(res->getJsonObject()->isMember("data"));
+    CHECK((*res->getJsonObject())["data"].isNull());
   });
-  // auto fn = [TEST_CTX]() -> Task<void> {
-  //   auto client = HttpClient::newHttpClient("http://localhost:8848");
-  //   auto req = HttpRequest::newHttpRequest();
-  //   req->setPath("/users");
-
-  //   auto res = co_await client->sendRequestCoro(req);
-  //   CO_REQUIRE(res != nullptr);
-  //   CHECK(res->getStatusCode() == k200OK);
-  //   CHECK(res->contentType() == CT_APPLICATION_JSON);
-  // };
-
-  fn1();
+  fn();
 }
