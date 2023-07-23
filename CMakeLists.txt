@@ -13,6 +13,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(${PROJECT_NAME} main.cc)
 
+find_package(PkgConfig)
+pkg_check_modules(MYSQL REQUIRED mysqlclient)
+target_include_directories(${PROJECT_NAME} PRIVATE ${MYSQL_INCLUDE_DIRS})
+# target_include_directories(${PROJECT_NAME} PRIVATE ${MySQL_LIBRARIES})
+find_library(MYSQL_CLIENT mysqlclient ${MYSQL_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${MYSQL_CLIENT})
+
 # ##############################################################################
 # If you include the drogon source code locally in your project, use this method
 # to add drogon 
