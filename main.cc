@@ -4,6 +4,8 @@
 
 #include "controllers/v1/users/v1_User.h"
 
+#define PORT 8080
+
 void setCustom404() {
     Json::Value result;
     result["status"] = 404;
@@ -11,12 +13,19 @@ void setCustom404() {
     drogon::app().setCustom404Page(drogon::HttpResponse::newHttpJsonResponse(result));
 }
 
+int getPort() {
+    const char *portStr = std::getenv("PORT");
+    if(portStr == nullptr) return PORT;
+    const int port = atoi(portStr);
+    if(port == 0) return PORT;
+    return port;
+}
+
 int main() {
     LOG_INFO << "Initializing...";
     drogon::app().loadConfigFile("../config.json");
   
-    const char *portStr = std::getenv("PORT");
-    int port = portStr == nullptr ? 1477 : atoi(portStr) == 0 ? 1477 : atoi(portStr);
+    int port = getPort();
     setCustom404();
     LOG_INFO << "Listening at 0.0.0.0:" << port;
     //Set HTTP listener address and port
