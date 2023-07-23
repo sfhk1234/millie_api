@@ -12,10 +12,11 @@ void setCustom404() {
 }
 
 int main() {
+    LOG_INFO << "Initializing...";
     drogon::app().loadConfigFile("../config.json");
   
-    int port = atoi(std::getenv("PORT"));
-    port = port == 0 ? 1477 : port;
+    const char *portStr = std::getenv("PORT");
+    int port = portStr == nullptr ? 1477 : atoi(portStr) == 0 ? 1477 : atoi(portStr);
     setCustom404();
     LOG_INFO << "Listening at 0.0.0.0:" << port;
     //Set HTTP listener address and port
