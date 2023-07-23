@@ -2,6 +2,8 @@
 #include <mysql.h>
 #include <cstdlib>
 
+#include "controllers/v1/users/v1_User.h"
+
 void setCustom404() {
     Json::Value result;
     result["status"] = 404;
